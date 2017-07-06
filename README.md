@@ -52,35 +52,55 @@ public Set<BluetoothDevice> getDispositivosPareados()
 private ServelojaBluetooth servelojaBluetooth;
 private Button btAbrirDialogProcurarDispositivos;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        
-        servelojaBluetooth = new ServelojaBluetooth(this);
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    
+    servelojaBluetooth = new ServelojaBluetooth(this);
 
-        // a prória Activity, implementa o ouvinte, e assim, passando this como parâmetro de ouvinte
-        servelojaBluetooth.setStatusBluetoothListener(this);
+    // a prória Activity, implementa o ouvinte, e assim, passando this como parâmetro de ouvinte
+    servelojaBluetooth.setStatusBluetoothListener(this);
 
-        btAbrirDialogProcurarDispositivos = (Button) findViewById(R.id.ac_main_bt_abrir_dialog);
+    btAbrirDialogProcurarDispositivos = (Button) findViewById(R.id.ac_main_bt_abrir_dialog);
 
-        btAbrirDialogProcurarDispositivos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // verifica se o Bluetooth está ativo
-                if (servelojaBluetooth.checkBluetoothAtivado()) {
-                    // inicia a busca por dispositivos
-                    servelojaBluetooth.iniciarProcuraDispositivos();
-                } else {
-                    // caso não esteja, solicita o usuário que o ative
-                    servelojaBluetooth.solicitarAtivacaoBluetooth();
-                }
+    btAbrirDialogProcurarDispositivos.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            // verifica se o Bluetooth está ativo
+            if (servelojaBluetooth.checkBluetoothAtivado()) {
+                // inicia a busca por dispositivos
+                servelojaBluetooth.iniciarProcuraDispositivos();
+            } else {
+                // caso não esteja, solicita o usuário que o ative
+                servelojaBluetooth.solicitarAtivacaoBluetooth();
             }
-        });
-        
-    }
+        }
+    });
+    
+}
 
+@Override
+public void onDispositivoEncontradoBluetooth(BluetoothDevice dispositivo) {
+    
+}
+
+@Override
+public void onEstadoAlteradoBluetooth(int estadoAtual, int estadoAnterior) {
+
+}
+
+@Override
+public void onProcuraDispositivoFinalizadaBluetooth() {
+
+}
+```
+
+Outra forma de implementar o ouvinte StatusBluetoothListener
+
+```java
+servelojaBluetooth.setStatusBluetoothListener(new StatusBluetoothListener() {
     @Override
     public void onDispositivoEncontradoBluetooth(BluetoothDevice dispositivo) {
-        
+
     }
 
     @Override
@@ -92,25 +112,5 @@ private Button btAbrirDialogProcurarDispositivos;
     public void onProcuraDispositivoFinalizadaBluetooth() {
 
     }
-```
-
-Outra forma de implementar o ouvinte StatusBluetoothListener
-
-```java
-    servelojaBluetooth.setStatusBluetoothListener(new StatusBluetoothListener() {
-            @Override
-            public void onDispositivoEncontradoBluetooth(BluetoothDevice dispositivo) {
-
-            }
-
-            @Override
-            public void onEstadoAlteradoBluetooth(int estadoAtual, int estadoAnterior) {
-
-            }
-
-            @Override
-            public void onProcuraDispositivoFinalizadaBluetooth() {
-
-            }
-        });
+});
 ```
